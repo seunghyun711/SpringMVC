@@ -14,15 +14,9 @@ public class CoffeeController {
 
     // 커피 정보 등록
     @PostMapping
-    public ResponseEntity postCoffee(@RequestParam("engName") String engName,
-                                     @RequestParam("korName") String korName,
-                                     @RequestParam("price") int price){
-        Map<String, Object> map = new HashMap<>();
-        map.put("engName",engName);
-        map.put("korName",korName);
-        map.put("price",price);
+    public ResponseEntity postCoffee(@RequestBody CoffeePostDto coffeePostDto){
 
-        return new ResponseEntity<>(map, HttpStatus.CREATED);
+        return new ResponseEntity<>(coffeePostDto, HttpStatus.CREATED);
     }
 
     // id로 커피 정보 조회
@@ -39,6 +33,22 @@ public class CoffeeController {
         System.out.println("# get coffees");
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 커피 정보 수정(가격만)
+    @PatchMapping("/{coffee-id}")
+    public ResponseEntity patchCoffee(@PathVariable("coffee-id") long coffeeId,
+                                      @RequestBody CoffeePatchDto coffeePatchDto){
+        coffeePatchDto.setCoffeeId(coffeeId);
+        coffeePatchDto.setPrice(6000);
+
+        return new ResponseEntity(coffeePatchDto,HttpStatus.OK);
+    }
+
+    // 커피 정보 삭제
+    @DeleteMapping("/{coffee-id}")
+    public ResponseEntity deleteCoffee(@PathVariable("coffee-id") long coffeeId){
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }

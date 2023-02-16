@@ -1,0 +1,5 @@
+@RequestBody : JSON형식의 Request BOdY를 dto클래스의 객체로 변환하는 역할 -> 클라이언트 쪽에서 전송하는 Request Body가 JSON 형식이어야 한다
+@RsponseBody : JSON형식의 Request Body를 클라이언트에게 전달하기 위해 dto클래스 객체를 Response Body로 변환하는 역할
+
+Spring MVC에서 핸들러 메서드에 @ResponseBody 애너테이션이 붙거나 핸들러 메서드의 리턴 값이 ResponseEntity인 경우
+내부적으로 HttpMessageConverter가 동작하여 응답객체(dto)를 JSON형식으로 변환한다.
