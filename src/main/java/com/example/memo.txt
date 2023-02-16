@@ -1,0 +1,12 @@
+<Jakarta Bean Validation>
+-> dto클래스에의 유효성 검사를 위해 사용했던 애너테이션(@Valid)은 Jakarta Bean Validation이라는 유효성 검증을 위한 표준 스팩에서 지원하는 내장 애너테이션들이다.
+Jakarta Bean Validation스펙을 구현한 구현체는 Hibernate Validator다.
+Java Bean스펙을 준수하는 Java클래스는 Jakarta Bean Validation의 애너테이션을 사용하여 유효성 검증을 할 수 있다.
+
+-> 만약 Jakarta Bean Validation의 애너테이션 중 목적에 맞는 애너테이션이 없을 수 있다.
+이 떄 Custom Validator를 사용하여 목적에 맞는 애너테이션을 직접 만들어 적용할 수 있다.
+
+-> Custom Validator 구현 절차
+1. Custom Validator를 사용하기 위한 Custom 애너테이션 적용
+2. 정의한 Custom 애너테이션에 바인딩 되는 Custom Validator를 구현한다.
+3. 유효성 검증이 필요한 dto클래스의 멤버 변수에 Custom 애너테이션을 추가한다.
