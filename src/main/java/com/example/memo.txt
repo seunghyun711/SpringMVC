@@ -10,3 +10,14 @@ Java Bean스펙을 준수하는 Java클래스는 Jakarta Bean Validation의 애�
 1. Custom Validator를 사용하기 위한 Custom 애너테이션 적용
 2. 정의한 Custom 애너테이션에 바인딩 되는 Custom Validator를 구현한다.
 3. 유효성 검증이 필요한 dto클래스의 멤버 변수에 Custom 애너테이션을 추가한다.
+
+<서비스 계층과 API계층 연동(DI 적용O) - 까지의 문제점>
+1. Controller 클래스에 있는 핸들러 메서드의 역할
+- 핸들러 메서드 역할은 클라이언트로부터 전달 받은 요청 데이터를 Service 클래스로 전달하고, 응답 데이터를 클라이언트로 전달하는 역할이다.
+그런데 현재 MemberContrller는 핸들러 메서드가 DTO 클래스를 Entity 객체로 변환하는 역할까지 맡고 있다.
+
+2. Service계층에서 사용되는 Entity 객체를 클라이언트의 응답으로 전송한다.
+- dto 클래스는 API 계층에서만 데이터를 처리하는 역할을 하고, Entity 클래스는 서비스 계층에서만 데이터를 처리하는 역할을 하여 각 클래스 간
+역할 분담이 이루어저야 하는데 Entity 객체가 dto 역할까지 담당하여 계층 간 역할 분리가 이루어지지 않았다.
+
+-> 이 문제를 해결하기 위해 dto 클래스와 entity 클래스를 서로 변환해주는 mapper를 만들어 따로 구현한다.

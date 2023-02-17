@@ -1,7 +1,10 @@
 package com.example.member;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service // 스프링 빈으로 등록된다.
 public class MemberService {
     // 회원 생성
     public Member createMember(Member member) {

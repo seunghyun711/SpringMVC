@@ -13,13 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@RestController // 스프링 빈으로 등록된다.
 @RequestMapping("/v1/members") // produces 설정 제거됨
 @Validated // @PathVaraible이 추가된 변수에 유효성 검증이 정상적으로 수행되려면 해당 애너테이션을 붙인다.
 public class MemberController {
     // ResponseEntity클래스로 응답 데이터를 래핑하여 http상태를 더 보기 쉽게 리턴할 수 있다.
 
-    private MemberService memberService; // MemberService 의존
+    private final MemberService memberService; // MemberService 의존
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
