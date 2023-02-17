@@ -1,4 +1,4 @@
-package com.example.member.mapper;
+package com.example.member.mapstruct.mapper;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,10 +1,12 @@
-package com.example.member.mapper;
+package com.example.member.mapstruct.mapper;
 
 import com.example.member.Member;
 import com.example.member.MemberPatchDto;
 import com.example.member.MemberPostDto;
+import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
+@Mapper(componentModel = "spring") // 스프링 빈으로 등록된다
 @Component // 스프링 빈으로 등록
 public class MemberMapper {
     // MemberPostDto를 Member로 변환
