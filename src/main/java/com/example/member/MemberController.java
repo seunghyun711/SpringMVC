@@ -1,10 +1,12 @@
 package com.example.member;
 
 import com.example.member.mapstruct.mapper.MemberMapper;
-import com.example.member.mapstruct.mapper.MemberResponseDto;
+import com.example.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -83,6 +85,21 @@ public class MemberController {
 
         memberService.deleteMember(memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity handlerException(MethodArgumentNotValidException e) {
+        final List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+
+        // 핖요한 정보만 선택적으로 골라 ErrorResponse.FieldError클래스에 담아 List로 변환하여 List<ErrorResponse.FieldError>를 ResponseEntity 클래스에 실어서 전달하고 있다.
+        List<ErrorResponse.FieldError> errors =
+        fieldErrors.stream()
+                .map(error -> new ErrorResponse.FieldError(
+                        error.getField(),
+                        error.getRejectedValue(),
+                        error.getDefaultMessage()))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
     }
 
 }
