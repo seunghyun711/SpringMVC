@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
-public class Coffee {
+public class CoffeeResponseDto {
     private long coffeeId;
     private String korName;
     private String engName;
