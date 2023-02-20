@@ -1,7 +1,8 @@
 package com.example.member;
 
-import com.example.member.mapstruct.mapper.MemberMapper;
+import com.example.member.mapper.MemberMapper;
 import com.example.response.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @RestController // 스프링 빈으로 등록된다.
 @RequestMapping("/v1/members") // produces 설정 제거됨
 @Validated // @PathVaraible이 추가된 변수에 유효성 검증이 정상적으로 수행되려면 해당 애너테이션을 붙인다.
+@Slf4j
 public class MemberController {
     // ResponseEntity클래스로 응답 데이터를 래핑하여 http상태를 더 보기 쉽게 리턴할 수 있다.
 
@@ -87,19 +89,12 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @ExceptionHandler
-    public ResponseEntity handlerException(MethodArgumentNotValidException e) {
+    @ExceptionHandler // 예외처리(controller레벨에서 예외처리)
+    public ResponseEntity handleException(MethodArgumentNotValidException e) {
         final List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
 
-        // 핖요한 정보만 선택적으로 골라 ErrorResponse.FieldError클래스에 담아 List로 변환하여 List<ErrorResponse.FieldError>를 ResponseEntity 클래스에 실어서 전달하고 있다.
-        List<ErrorResponse.FieldError> errors =
-        fieldErrors.stream()
-                .map(error -> new ErrorResponse.FieldError(
-                        error.getField(),
-                        error.getRejectedValue(),
-                        error.getDefaultMessage()))
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
     }
 
 }
