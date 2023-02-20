@@ -21,7 +21,7 @@ public class MemberService {
     // id로 회원 정보 조회
     public Member findMember(long memberId) {
         Member member = new Member(memberId, "hong@.com", "hong", "011-2222-2222");
-        return member;
+        throw new RuntimeException("Not found member");
     }
 
     // 전체 회원 정보 조회

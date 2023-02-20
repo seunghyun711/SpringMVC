@@ -31,4 +31,12 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
+    // 서비스 계층에서 던져진(throw) RuntimeException을 잡아서 처리
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleResourceNotFoundException(RuntimeException e){
+        System.out.println(e.getMessage());
+        return null;
+    }
+
 }
