@@ -48,3 +48,7 @@ Java Bean스펙을 준수하는 Java클래스는 Jakarta Bean Validation의 애�
 <@RestControllerAdvice VS @ControllerAdvice>
 @RestControllerAdvice는 @ControllerAdvice의 기능을 포함하고 있고, @ResponseBody의 기능도 포함하고 있다. 따라서
 JSON형태의 데이터를 ResponseBody로 전송하기 위해 ResponseEntity로 데이터를 변환할 필요가 없다.
+
+<@RestControllerAdvice에서 @ResponseStatus 를 쓸까? ResponseEntity을 쓸까?>
+한가지 유형으로 고정된 예외를 처리할 경우 @ResponseStatus로 HttpStatus를 지정해서 사용하고,
+다양한 유형의 사용자 정의 예외를 처리하고자 하는 경우에는 ResponseEntity를 사용한다.

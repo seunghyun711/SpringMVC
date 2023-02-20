@@ -1,5 +1,6 @@
 package com.example.advice;
 
+import com.example.exception.BusinessLogicException;
 import com.example.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,4 +40,13 @@ public class GlobalExceptionAdvice {
         return null;
     }
 
+    // 사용자 정의 예외
+    @ExceptionHandler
+    public ResponseEntity handleBusinessLogicException(BusinessLogicException e){
+        System.out.println(e.getExceptionCode().getStatus());
+        System.out.println(e.getMessage());
+
+        return new ResponseEntity<>(HttpStatus.valueOf(e.getExceptionCode().getStatus()));
+
+    }
 }
