@@ -89,19 +89,5 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @ExceptionHandler // 예외처리(controller레벨에서 예외처리)
-    public ResponseEntity handleException(MethodArgumentNotValidException e) {
-        final List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
-
-        // 필요한 정보만 골라서 ErrorResponse.FieldError에 담아 리스토로 변환한 후 List<ErrorResponse.FieldError>를 ResponseEntity클래스에 담아서 전달한다.
-        List<ErrorResponse.FieldError> errors =
-                fieldErrors.stream()
-                        .map(error -> new ErrorResponse.FieldError(
-                                error.getField(),
-                                error.getRejectedValue(),
-                                error.getDefaultMessage()))
-                        .collect(Collectors.toList());
-        return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
-    }
 
 }

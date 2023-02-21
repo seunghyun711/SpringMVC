@@ -2,6 +2,7 @@ package com.example.order;
 
 import com.example.exception.BusinessLogicException;
 import com.example.exception.ExceptionCode;
+import com.example.order.entity.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package com.example.order;
 
 import com.example.coffee.CoffeeResponseDto;
+import com.example.order.entity.Order;
 import lombok.Getter;
 import lombok.Setter;
 
