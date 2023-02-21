@@ -38,4 +38,10 @@ public class OrderController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // id로 해당 주문 정보 삭제
+    @DeleteMapping("/{order-id}")
+    public ResponseEntity deleteOrder(@PathVariable long orderId){
+        return null;
+    }
 }
