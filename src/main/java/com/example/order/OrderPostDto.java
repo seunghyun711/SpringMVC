@@ -13,4 +13,8 @@ public class OrderPostDto {
     @Positive
     private long memberId;
 
+    // 여러 잔의 커피 주문하게 수정
+    @Valid
+    private List<OrderCoffeeDto> orderCoffees;
+
 }
