@@ -3,7 +3,13 @@ package com.example.exception;
 import lombok.Getter;
 
 public enum ExceptionCode { // 예외 코드 정의
-    MEMBER_NOT_FOUND(404,"Member Not Found");
+    MEMBER_NOT_FOUND(404, "Member not found"),
+    MEMBER_EXISTS(409, "Member exists"),
+    COFFEE_NOT_FOUND(404, "Coffee not found"),
+    COFFEE_CODE_EXISTS(409, "Coffee Code exists"),
+    ORDER_NOT_FOUND(404, "Order not found"),
+    CANNOT_CHANGE_ORDER(403, "Order can not change"),
+    NOT_IMPLEMENTATION(501, "Not Implementation");
 
     @Getter
     private int status;
