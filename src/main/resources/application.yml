@@ -5,6 +5,7 @@ spring:
       path: /h2
   datasource:
     url: jdbc:h2:mem:test
-  sql:
-    init:
-      schema-locations: classpath*:db/h2/schema.sql
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true

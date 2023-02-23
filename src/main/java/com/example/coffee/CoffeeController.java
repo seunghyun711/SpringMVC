@@ -1,6 +1,7 @@
 package com.example.coffee;
 
 import com.example.coffee.mapper.CoffeeMapper;
+import com.example.coffee.service.CoffeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/v1/coffees", produces = MediaType.APPLICATION_JSON_VALUE)
