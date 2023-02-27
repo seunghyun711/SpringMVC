@@ -1,42 +1,21 @@
 package com.example.coffee;
 
-import org.hibernate.validator.constraints.Range;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-public class CoffeePostDto { // 커피 정보 등록 시 Request Body를 받을 때 사용되는 클래스
+@Getter
+@Setter
+public class CoffeePostDto {
+    @NotBlank(message = "이름은 공백이 아니어야 합니다.")
     @NotBlank
-    private String korName;
-    @NotBlank
-    @Pattern(regexp = "^([A-Za-z])(\\s?[A-Za-z])*$",
-            message = "커피명(영문)은 영문이어야 합니다(단어 사이 공백 한 칸 포함). 예) Cafe Latte")
+    @Pattern(regexp = "^[a-zA-Z]+(\\s?[a-zA-Z])*$",
+            message = "영문만 가능하고, 영문 워드 사이에 한칸의 공백만 허용합니다.")
     private String engName;
 
-    @Range(min= 100, max= 50000)
+    @NotBlank(message = "이름은 공백이 아니어야 합니다.")
+    private String korName;
     private int price;
-
-    public String getEngName() {
-        return engName;
-    }
-
-    public void setEngName(String engName) {
-        this.engName = engName;
-    }
-
-    public String getKorName() {
-        return korName;
-    }
-
-    public void setKorName(String korName) {
-        this.korName = korName;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
 }

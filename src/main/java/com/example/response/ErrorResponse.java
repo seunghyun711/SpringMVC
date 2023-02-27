@@ -11,36 +11,35 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-public class ErrorResponse { // 에러 정보 중 필요한 정보만 담아서 클라이언트에 전달
-    private List<FieldError> fieldErrors; // dto클래스에서 검증해야 하는 멤버 변수들 중 유효성 검증에 실패하는 변수가 하나 이상이 될 수 있기 때문에 배열로 선언
-    private List<ConstraintViolationError> violationErrors; // URI 변수로 넘어오는 값의 유효성 검증에 대한 에러
+public class ErrorResponse {
+    private List<FieldError> fieldErrors; // MethodArgumentNotValidException 으로부터 발생하는 에러 정보를 담는 멤버 변수
+    private List<ConstraintViolationError> violationErrors; // ConstraintViolationException 으로부터 발생하는 에러 정보를 담는 멤버 변수
 
     public ErrorResponse(List<FieldError> fieldErrors, List<ConstraintViolationError> violationErrors) {
         this.fieldErrors = fieldErrors;
         this.violationErrors = violationErrors;
     }
 
-    // BindingResult에 대한 ErrorResponse객체 생성
-    public static ErrorResponse of(BindingResult bindingResult){
-        return new ErrorResponse(FieldError.of(bindingResult),null);
+    // BindingResult에 대한 ErrorResponse 객체 생성
+    public static ErrorResponse of(BindingResult bindingResult) {
+        return new ErrorResponse(FieldError.of(bindingResult), null);
     }
 
     // Set<ConstraintViolation<?>> 객체에 대한 ErrorResponse 객체 생성
-    public static ErrorResponse of(Set<ConstraintViolation<?>> violations){
-        return new ErrorResponse(null,ConstraintViolationError.of(violations));
+    public static ErrorResponse of(Set<ConstraintViolation<?>> violations) {
+        return new ErrorResponse(null, ConstraintViolationError.of(violations));
     }
 
-    // FieldError 가공
     @Getter
     @AllArgsConstructor
-    public static class FieldError{ // ErrorResponse의 static 멤버 클래스
+    public static class FieldError{
         private String field;
         private Object rejectedValue;
         private String reason;
 
-        // BindingResult에 대한 ErrorResponse 객체 생성
-        public static List<FieldError> of(BindingResult bindingResult){
-            final List<org.springframework.validation.FieldError> fieldErrors = bindingResult.getFieldErrors();
+        public static List<FieldError> of(BindingResult bindingResult) {
+            final List<org.springframework.validation.FieldError> fieldErrors =
+                    bindingResult.getFieldErrors();
 
             return fieldErrors.stream()
                     .map(error -> new FieldError(
@@ -52,7 +51,7 @@ public class ErrorResponse { // 에러 정보 중 필요한 정보만 담아서 
         }
     }
 
-    // ConstraintViolation Error 가공
+    //ConstraintViolation Error 가공
     @Getter
     @AllArgsConstructor
     public static class ConstraintViolationError{
@@ -60,7 +59,8 @@ public class ErrorResponse { // 에러 정보 중 필요한 정보만 담아서 
         private Object rejectedValue;
         private String reason;
 
-        public static List<ConstraintViolationError> of(Set<ConstraintViolation<?>> constraintViolations){
+        public static List<ConstraintViolationError> of(
+                Set<ConstraintViolation<?>> constraintViolations){
             return constraintViolations.stream()
                     .map(constraintViolation -> new ConstraintViolationError(
                             constraintViolation.getPropertyPath().toString(),

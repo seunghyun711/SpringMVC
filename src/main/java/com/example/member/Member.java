@@ -4,18 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Getter
 @Setter
-@NoArgsConstructor // 파라미터가 없는 기본 생성자를 자동으로 구현
-@AllArgsConstructor // 모든 Member클래스의 멤버 변수를 파리미터로 가지는 생성자를 자동으로 구현
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity // 해당 클래스는 엔티티 클래스다.
 public class Member {
-    @Id // memberId를 식별자로 지정
+    @Id //
+    @GeneratedValue // 식별자 생성 전략
     private long memberId;
     private String email;
     private String name;
     private String phone;
 
-
+    public Member(String email) {
+        this.email = email;
+    }
 }

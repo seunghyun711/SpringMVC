@@ -2,15 +2,12 @@ package com.example.coffee;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @AllArgsConstructor
 public class CoffeeResponseDto {
     private long coffeeId;
-    private String korName;
     private String engName;
+    private String korName;
     private int price;
-
 }

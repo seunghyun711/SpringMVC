@@ -1,28 +1,25 @@
 package com.example.member;
 
 import com.example.member.mapper.MemberMapper;
-import com.example.response.ErrorResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-@RestController // 스프링 빈으로 등록된다.
-@RequestMapping("/v1/members") // produces 설정 제거됨
-@Validated // @PathVaraible이 추가된 변수에 유효성 검증이 정상적으로 수행되려면 해당 애너테이션을 붙인다.
-@Slf4j
+@RestController
+@RequestMapping(value = "/v1/members")
+@Validated // @PathVariable이 추가된 변수에 유효성 검증이 정상적으로 수행되려면 필요
 public class MemberController {
-    // ResponseEntity클래스로 응답 데이터를 래핑하여 http상태를 더 보기 쉽게 리턴할 수 있다.
-
-    private final MemberService memberService; // MemberService 의존
+    private final MemberService memberService;
     private final MemberMapper mapper;
 
     public MemberController(MemberService memberService, MemberMapper mapper) {
@@ -31,52 +28,47 @@ public class MemberController {
     }
 
     // 회원 정보 등록
-    // @Valid : dto 클래스에서 유효성 검사가 실행되려면 @Vaild애너테이션을 붙여준다.
     @PostMapping
-    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) { // dto클래스 적용
-        // @RequestParam : 클라이언트 쪽에서 전송하는 요청 데이터를 쿼리 파라미터, 폼 데이터 형식으로 전송하면 이를 서버에서 전달 받을 때 사용하는 애너테이션
-        // JSON 문자열을 직접 입력하지 않고, map으로 대체
-        // 매퍼 이용
-        Member member = mapper.memberPostDtoToMember(memberPostDto);
+    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
 
+        // MemberPostDto -> Member
+        Member member = mapper.memberPostDtoToMember(memberPostDto);
         Member response = memberService.createMember(member);
 
-        // 리턴 값을 ResponseEntity객체로 변경
-        return new ResponseEntity<>(mapper.memberResponseDto(response), HttpStatus.CREATED);
+        // (3) 리턴 값을 ResponseEntity 객체로 변경
+        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.CREATED);
     }
 
     // 회원 정보 수정
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-                                      @Valid @RequestBody MemberPatchDto memberPatchDto){
+    public ResponseEntity patchMember(@PathVariable("member-id") @Min(1) long memberId,
+                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
         memberPatchDto.setMemberId(memberId);
 
-        Member member = mapper.memberPatchDtoToMember(memberPatchDto);
-        Member response = memberService.updateMember(member);
+        // MemberPatchDto -> Member
+       Member response =
+               memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
 
-        return new ResponseEntity<>(mapper.memberResponseDto(response),HttpStatus.OK);
+
+        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
 
-    // memberId로 해당 회원 정보 조회
+    // id로 회원 정보 조회
     @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
         Member response = memberService.findMember(memberId);
-
-        // 리턴 값을 ResponseEntity객체로 변경
-        return new ResponseEntity<>(mapper.memberResponseDto(response),HttpStatus.OK);
+        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response),HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity getMembers() {
-        List<Member> members =  memberService.findMembers();
+        List<Member> members = memberService.findMembers();
 
-        // 매퍼 이용해서 List<Member>를 MemberResponseDto로 변환
         List<MemberResponseDto> response =
                 members.stream()
-                        .map(member -> mapper.memberResponseDto(member))
+                        .map(member -> mapper.memberToMemberResponseDto(member))
                         .collect(Collectors.toList());
 
-        // 리턴 값을 ResponseEntity객체로 변경
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -84,9 +76,8 @@ public class MemberController {
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId){
         System.out.println("# delete member");
-
         memberService.deleteMember(memberId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 

@@ -14,11 +14,12 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice // Controller클래스에서 발생하는 예외를 맡아서 처리한다.
+@RestControllerAdvice // 여러 Controller 클래스에서 @ExceptionHandler, @InitBinder, @ModelAttribute 가 추가된 메서드를 공유해서 사용할 수 있다.
+// Controller 클래스에서 발생하는 예외처리를 여기서 다 처리한다 ->  예외 처리를 공통화 한다.
 public class GlobalExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+    public ErrorResponse handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         final ErrorResponse response = ErrorResponse.of(e.getBindingResult());
 
         return response;
@@ -26,27 +27,25 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleConstraintViolationException(ConstraintViolationException e){
+    public ErrorResponse handlerConstraintViolationException(ConstraintViolationException e) {
+
         final ErrorResponse response = ErrorResponse.of(e.getConstraintViolations());
 
         return response;
     }
 
-    // 서비스 계층에서 던져진(throw) RuntimeException을 잡아서 처리
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleResourceNotFoundException(RuntimeException e){
-        System.out.println(e.getMessage());
-        return null;
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    public ErrorResponse handlerResourceNotFoundException(RuntimeException e) {
+//        System.out.println(e.getMessage());
+//        return null;
+//    }
 
-    // 사용자 정의 예외
     @ExceptionHandler
-    public ResponseEntity handleBusinessLogicException(BusinessLogicException e){
+    public ResponseEntity handleBusinessLogicException(BusinessLogicException e) {
         System.out.println(e.getExceptionCode().getStatus());
         System.out.println(e.getMessage());
 
         return new ResponseEntity<>(HttpStatus.valueOf(e.getExceptionCode().getStatus()));
-
     }
 }

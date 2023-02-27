@@ -4,9 +4,8 @@ import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.lang.annotation.Annotation;
 
-public class NotSpaceValidator implements ConstraintValidator<NotSpace,String> {
+public class NotSpaceValidator implements ConstraintValidator<NotSpace, String> {
 
     @Override
     public void initialize(NotSpace constraintAnnotation) {
@@ -15,6 +14,6 @@ public class NotSpaceValidator implements ConstraintValidator<NotSpace,String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return false;
+        return value == null || StringUtils.hasText(value);
     }
 }
