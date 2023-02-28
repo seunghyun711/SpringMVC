@@ -29,6 +29,10 @@ public class Member {
     @Column(length = 13, nullable = false, unique = true)
     private String phone;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
+
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -64,5 +68,18 @@ public class Member {
 
     public void addOrder(Order order) {
         orders.add(order);
+    }
+
+    private enum MemberStatus{ // 회원 상태 저장
+        MEMBER_ACTIVE("활동중"),
+        MEMBER_SLEEP("휴면 상태"),
+        MEMBER_QUIT("탈퇴 상태");
+
+        @Getter
+        private String status;
+
+        MemberStatus(String status) {
+            this.status = status;
+        }
     }
 }
