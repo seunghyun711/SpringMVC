@@ -85,3 +85,10 @@ SEQUENCE
 @Enumerated(EnumType.ORDINAL) : enum의 순서를 니타내는 숫자를 테이블에 저장
 @Enumerated(EnumType.STRING) : enum의 이름을 테이블에 저장
 ORDINAL은 기존에 정의된 enum 순서 번호와 enum에 정의된 순서가 일치하지 않는 경우 문제가 발생한다.
+
+<객체 그래프 탐색>
+findOrder.getMember().getMemberId()와 같이 객체를 통해 다른 객체의 정보를 가져오는 것
+
+<JPQL>
+-> 객체 지향 쿼리.
+-> 데이터베이스의 테이블을 대상으로 데이터 작업을 하는 것이 아니라 엔티티 클래스의 객체를 대상으로 객체를 다룬다.
