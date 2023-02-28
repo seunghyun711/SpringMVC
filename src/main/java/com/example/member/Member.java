@@ -1,5 +1,6 @@
 package com.example.member;
 
+import com.example.order.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,6 +35,15 @@ public class Member {
     @Column(nullable = false, name = "LAST_MODIFIED_AT")
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
+    /*
+    <mappedBy에는 관계를 소유하고 있는 필드를 지정한다.>
+    Member와 Order 간 매핑 관계에서 ORDER 테이블의 외래키로 MEMBER 테이블의 기본키인 MEMBER_ID를 사용한다.
+    Order 클래스에서 외래키 역할을 하는 것은 member필드가 될 것이다.따라서 아래 애너테이션에서
+    mapperBy에 member가 들어가는 것이다.
+     */
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
+
     @Transient // 해당 필드는 테이블 컬럼과 매핑하지 않는 것으로 jpa가 인식
     private String age;
 
@@ -48,5 +60,9 @@ public class Member {
         this.email = email;
         this.name = name;
         this.phone = phone;
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
     }
 }
