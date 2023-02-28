@@ -80,3 +80,8 @@ IDENTITY
 SEQUENCE
 -> 테이블에 데이터를 INSERT 하기 위해 SEQUENCE로부터 미리 식별자를 얻을 수 있다.
 -> persist()시 영속성 컨텍스트에 엔티티가 저장되고 commit()하기 전까지 테이블에 반영되지 않는다.
+
+< @Enumerated(EnumType.STRING) VS  @Enumerated(EnumType.ORDINAL)>
+@Enumerated(EnumType.ORDINAL) : enum의 순서를 니타내는 숫자를 테이블에 저장
+@Enumerated(EnumType.STRING) : enum의 이름을 테이블에 저장
+ORDINAL은 기존에 정의된 enum 순서 번호와 enum에 정의된 순서가 일치하지 않는 경우 문제가 발생한다.
