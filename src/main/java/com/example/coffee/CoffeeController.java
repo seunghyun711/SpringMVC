@@ -1,6 +1,8 @@
 package com.example.coffee;
 
 import com.example.coffee.mapper.CoffeeMapper;
+import com.example.response.MultiResponseDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,16 +55,15 @@ public class CoffeeController {
     }
 
     @GetMapping
-    public ResponseEntity getCoffees() {
-        List<Coffee> coffees = coffeeService.findCoffees();
-        List<CoffeeResponseDto> response =
-                coffees.stream()
-                        .map(coffee -> mapper.coffeeToCoffeeResponseDto(coffee))
-                        .collect(Collectors.toList());
+    public ResponseEntity getCoffees(@Positive @RequestParam int page,
+                                     @Positive @RequestParam int size) {
+        Page<Coffee> pageCoffees = coffeeService.findCoffees(page-1, size);
+        List<Coffee> coffees = pageCoffees.getContent();
 
-        // not implementation
-
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(
+            new MultiResponseDto<>(mapper.coffeesToCoffeeResponseDtos(coffees),
+                    pageCoffees),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/{coffee-id}")
