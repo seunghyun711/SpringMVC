@@ -1,6 +1,7 @@
 package com.example.member;
 
 import com.example.order.Order;
+import com.example.stamp.Stamp;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,10 @@ public class Member {
      */
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
+
+    // Stamp와 일대일 매핑
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private Stamp stamp;
 
     @Transient // 해당 필드는 테이블 컬럼과 매핑하지 않는 것으로 jpa가 인식
     private String age;
