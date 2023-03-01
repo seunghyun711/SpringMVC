@@ -70,7 +70,7 @@ public class Member {
         orders.add(order);
     }
 
-    private enum MemberStatus{ // 회원 상태 저장
+    public enum MemberStatus{ // 회원 상태 저장
         MEMBER_ACTIVE("활동중"),
         MEMBER_SLEEP("휴면 상태"),
         MEMBER_QUIT("탈퇴 상태");
