@@ -6,6 +6,8 @@ import com.example.coffee.CoffeePostDto;
 import com.example.coffee.CoffeeResponseDto;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface CoffeeMapper {
     // CoffeePostDto -> Coffee
@@ -16,4 +18,6 @@ public interface CoffeeMapper {
 
     // Coffee -> CoffeeResponseDto
     public CoffeeResponseDto coffeeToCoffeeResponseDto(Coffee coffee);
+
+    List<CoffeeResponseDto> coffeesToCoffeeResponseDtos(List<Coffee> coffees);
 }
