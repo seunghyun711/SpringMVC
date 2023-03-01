@@ -2,7 +2,9 @@ package com.example.coffee;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -17,5 +19,17 @@ public class CoffeePatchDto {
 
     @NotBlank
     private String korName;
+
+    @Range(min = 100, max = 5000)
     private int price;
+
+    private Coffee.CoffeeStatus coffeeStatus;
+
+    public void setCoffeeId(long coffeeId) {
+        this.coffeeId = coffeeId;
+    }
+
+    public Integer getPrice(){
+        return price;
+    }
 }

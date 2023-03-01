@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Coffee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
