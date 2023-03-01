@@ -1,6 +1,8 @@
 package com.example.member;
 
 import com.example.member.mapper.MemberMapper;
+import com.example.response.MultiResponseDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -61,15 +63,14 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity getMembers() {
-        List<Member> members = memberService.findMembers();
+    public ResponseEntity getMembers(@Positive @RequestParam int page,
+                                     @Positive @RequestParam int size) {
+        Page<Member> pageMembers = memberService.findMembers(page - 1, size);
+        List<Member> members = pageMembers.getContent();
 
-        List<MemberResponseDto> response =
-                members.stream()
-                        .map(member -> mapper.memberToMemberResponseDto(member))
-                        .collect(Collectors.toList());
-
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(
+            new MultiResponseDto<>(mapper.membersToMemberResponseDtos(members),pageMembers),
+        HttpStatus.OK);
     }
 
     // 회원 정보 삭제

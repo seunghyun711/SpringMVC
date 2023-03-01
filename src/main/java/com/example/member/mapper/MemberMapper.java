@@ -7,6 +7,8 @@ import com.example.member.MemberResponseDto;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
     // MemberPostDto -> Member
@@ -17,5 +19,7 @@ public interface MemberMapper {
 
     // Member -> MemberResponseDto
     MemberResponseDto memberToMemberResponseDto(Member member);
+
+    List<MemberResponseDto> membersToMemberResponseDtos(List<Member> members);
 
 }
