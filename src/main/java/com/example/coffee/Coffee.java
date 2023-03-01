@@ -1,5 +1,6 @@
 package com.example.coffee;
 
+import com.example.order.OrderCoffee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,6 +38,10 @@ public class Coffee {
     private LocalDateTime createdAt = LocalDateTime.now();
     @Column(nullable = false,name = "LAST_MODIFIED_AT")
     private LocalDateTime modifiedAt = LocalDateTime.now();
+
+    // Coffee - OrderCoffee 간 양방향 매핑
+    @OneToMany(mappedBy = "coffee")
+    private List<OrderCoffee> orderCoffees = new ArrayList<>();
 
     public Coffee(String engName, String korName, int price) {
         this.engName = engName;

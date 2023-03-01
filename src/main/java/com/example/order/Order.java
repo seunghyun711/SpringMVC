@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -26,6 +28,10 @@ public class Order {
     @ManyToOne // 다대일 매핑
     @JoinColumn(name = "MEMBER_ID") // Member 테이블과 매핑, MEMBER 테이블의 기본키인 MEMBER_ID를 적어준다.
     private Member member;
+
+    // Order - OrderCoffee 간 양방향 매핑
+    @OneToMany(mappedBy = "order")
+    private List<OrderCoffee> orderCoffees = new ArrayList<>();
 
     public void addMember(Member member) {
         this.member = member;
