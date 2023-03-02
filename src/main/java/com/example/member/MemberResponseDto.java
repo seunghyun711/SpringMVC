@@ -13,6 +13,7 @@ public class MemberResponseDto {
     private String name;
     private String phone;
     private Member.MemberStatus memberStatus;
+    private int stampCount;
 
     public String getMemberStatus(){
         return memberStatus.getStatus();

@@ -2,6 +2,8 @@ package com.example.member;
 
 import com.example.member.mapper.MemberMapper;
 import com.example.response.MultiResponseDto;
+import com.example.stamp.Stamp;
+import com.example.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/v1/members")
 @Validated // @PathVariable이 추가된 변수에 유효성 검증이 정상적으로 수행되려면 필요
 public class MemberController {
+    private final static String MEMBER_DEFAULT_URL = "/v1/members";
     private final MemberService memberService;
     private final MemberMapper mapper;
 
@@ -35,10 +39,12 @@ public class MemberController {
 
         // MemberPostDto -> Member
         Member member = mapper.memberPostDtoToMember(memberPostDto);
-        Member response = memberService.createMember(member);
+        member.setStamp(new Stamp()); // 스탬프 추가
+        memberService.createMember(member);
+        URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, member.getMemberId());
 
         // (3) 리턴 값을 ResponseEntity 객체로 변경
-        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.CREATED);
+        return ResponseEntity.created(location).build();
     }
 
     // 회원 정보 수정
