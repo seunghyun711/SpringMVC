@@ -30,7 +30,7 @@ public class Order {
     private Member member;
 
     // Order - OrderCoffee 간 양방향 매핑
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order",cascade = CascadeType.PERSIST)
     private List<OrderCoffee> orderCoffees = new ArrayList<>();
 
     public void addMember(Member member) {

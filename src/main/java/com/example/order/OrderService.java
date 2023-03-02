@@ -63,7 +63,7 @@ public class OrderService {
     }
 
     public Page<Order> findOrders(int page, int size) {
-        return orderRepository.findAll(PageRequest.of(page - 1, size, Sort.by("orderId").descending()));
+        return orderRepository.findAll(PageRequest.of(page, size, Sort.by("orderId").descending()));
     }
 
     public void cancelOrder(long orderId) {
