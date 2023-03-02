@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional // 트랜잭션 적용
 public class MemberService {
    private final MemberRepository memberRepository;
 
@@ -39,6 +41,12 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
+    /*
+    @Tractional(readOnly = true)로 설정하면 commit이 실행되면 영속성 컨텍스트를 flush 하지 않는다.
+    flush 처리를 하지 않고 스냅샷 생성도 하지 않는다, 따라서 데이터 변경이 없는 조회 메서드에 사용하면
+    불필요한 동작을 줄일 수 있어 효율적이다.
+     */
+    @Transactional(readOnly = true) // 메서들 레밸 트랜젝션 적용
     public Member findMember(long memberId){
         return findVerifiedMember(memberId);
     }
