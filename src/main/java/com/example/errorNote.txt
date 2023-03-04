@@ -1,0 +1,4 @@
+<sql에러 : table not found>
+SpringBootApplication 구동 중 schema.sql을 초기화하는 과정에서 테이블을 찾을 수 없어 오류가 발생했다.
+spring boot 2.5버전 부터 스크립트 기반 초기화 동작과정을 flyway, liquibase와 일치시키기 위해 sechma.sql이 초기화 전에 실행된다.
+따라서 Hibernate 초기화로 생성된 스키마에 데이터를 입력하기 위해 ymp파일에 'defer-datasource-initialization: true'을 추가한다.

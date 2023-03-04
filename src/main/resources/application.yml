@@ -10,11 +10,14 @@ spring:
       data-locations: classpath*:db/h2/schema.sql
       mode: always
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create  # (1) 스키마 자동 생성
     show-sql: true      # (2) SQL 쿼리 출력
-    properties:
-      hibernate:
-        format_sql: true
-    defer-datasource-initialization: true  # 데이터 소스 초기화 지연 설정
-#    open-in-view: true
+
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
