@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
@@ -28,6 +29,7 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED) // 현재 진행 중인 트랜잭션이 존재하면 그 트랜잭션 사용하고, 존재하지 않으면 새 트랜잭션을 생성한다.
     public Member updateMember(Member member){
         // 회원 검증(id)
         Member findMember = findVerifiedMember(member.getMemberId());

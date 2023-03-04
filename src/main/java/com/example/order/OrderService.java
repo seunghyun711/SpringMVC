@@ -10,12 +10,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@Transactional // 트랜잭션 적용
 public class OrderService {
     private final MemberService memberService;
     private final OrderRepository orderRepository;
@@ -46,7 +48,9 @@ public class OrderService {
         // 3. 주문한 커피 수 만큼 스탬프 증가
         updateStamp(reportOrder);
 
-        return reportOrder;
+        throw new RuntimeException("Rollback Test"); // 롤백이 진행되고 OrderService에서 진행중인 트랜잭션에 묶인 모든 작업들도 같이 rollback 된다.
+
+//        return reportOrder;
     }
 
     public Order updateOrder(Order order) {
