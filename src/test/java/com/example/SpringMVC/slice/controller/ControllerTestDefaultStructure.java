@@ -1,4 +1,4 @@
-package com.example.SpringMVC.slice;
+package com.example.SpringMVC.slice.controller;
 
 import com.example.member.MemberDto;
 import com.google.gson.Gson;
