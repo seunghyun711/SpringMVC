@@ -1,6 +1,8 @@
 package com.example.SpringMVC.slice.controller;
 
+import com.example.member.Member;
 import com.example.member.MemberDto;
+import com.example.member.MemberPatchDto;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
@@ -78,5 +81,107 @@ public class ControllerTestDefaultStructure {
                 .andExpect(jsonPath("$.email").value(post.getEmail()))
                 .andExpect(jsonPath("$.name").value(post.getName()))
                 .andExpect(jsonPath("$.phone").value(post.getPhone()));
+    }
+
+    @Test
+    public void patchMember() throws Exception{
+
+        // given
+        // 테스트를 위한 데이터를 미리 생성
+        MemberDto.Post post = new MemberDto.Post("hong@com", "hong", "010-2222-2222");
+        String postContent = gson.toJson(post);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        post("/v1/members")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(postContent)
+                );
+        String location = actions.andReturn().getResponse().getHeader("Location");
+        long memberId = Long.parseLong(location.substring(location.lastIndexOf("/") + 1));
+
+        // when
+        MemberDto.Patch patch = new MemberDto.Patch(memberId, "홍", "010-5678-1234", Member.MemberStatus.MEMBER_SLEEP);
+        String patchContent = gson.toJson(patch);
+
+        ResultActions patchActions =
+                mockMvc.perform(
+                        patch("/v1/members/" + memberId)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(patchContent)
+                );
+        // then
+        patchActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(patch.getName()))
+                .andExpect(jsonPath("$.phone").value(patch.getPhone()));
+    }
+
+    @Test
+    void getMembersTest() throws Exception {
+        // given
+        MemberDto.Post post1 = new MemberDto.Post("hgd@gmail.com", "홍길동", "010-0000-0000");
+        String content1 = gson.toJson(post1);
+
+        ResultActions a1 =
+                mockMvc.perform(
+                        post("/v1/members")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(content1)
+                );
+        MemberDto.Post post2 = new MemberDto.Post("lgd@gmail.com", "이길동", "010-2322-2212");
+        String content2 = gson.toJson(post2);
+
+        ResultActions a2 =
+                mockMvc.perform(
+                        post("/v1/members")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(content2));
+
+        String location1 = a1.andReturn().getResponse().getHeader("Location");
+        String location2 = a2.andReturn().getResponse().getHeader("Location");
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("page","1");
+        map.add("size","3");
+        // when
+        mockMvc.perform(
+                get("/v1/members")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .param("page","1")
+                        .param("size","3")
+        )
+                .andExpect(status().isOk());
+
+        // then
+    }
+
+    @Test
+    public void deleteMemberTest() throws  Exception{
+        // given
+        MemberDto.Post post = new MemberDto.Post("hgd@gmail.com", "홍길동", "010-1234-5678");
+        String content = gson.toJson(post);
+
+        ResultActions actions =
+                mockMvc.perform(
+                        post("/v1/members")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(content)
+                );
+        String location = actions.andReturn().getResponse().getHeader("Location");
+        long memberId = Long.parseLong(location.substring(location.lastIndexOf("/") + 1));
+
+        mockMvc.perform(
+                delete("/v1/members/" + memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNoContent());
+
+        // when
+
+        // then
     }
 }
