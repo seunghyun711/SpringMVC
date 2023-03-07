@@ -4,6 +4,7 @@ import com.example.stamp.Stamp;
 import com.example.validator.NotSpace;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
@@ -15,6 +16,7 @@ import javax.validation.constraints.Pattern;
 public class MemberDto {
     @Getter
     @AllArgsConstructor // TODO 테스트를 위해 추가됨
+    @NoArgsConstructor
     public static class Post {
         @NotBlank
         @Email

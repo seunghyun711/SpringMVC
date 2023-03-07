@@ -35,10 +35,10 @@ public class MemberController {
 
     // 회원 정보 등록
     @PostMapping
-    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
+    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
 
         // MemberPostDto -> Member
-        Member member = mapper.memberPostDtoToMember(memberPostDto);
+        Member member = mapper.memberPostDtoToMember(requestBody);
         member.setStamp(new Stamp()); // 스탬프 추가
         memberService.createMember(member);
         URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, member.getMemberId());

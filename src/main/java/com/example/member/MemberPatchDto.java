@@ -4,12 +4,13 @@ import com.example.validator.NotSpace;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 public class MemberPatchDto {
-    @NotSpace(message = "회원 이름은 공백이 아니어야 합니다")
+    @NotNull(message = "회원 이름은 공백이 아니어야 합니다")
     private long memberId;
 
     @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "회원 이름은 공백이 아니어야 합니다.")
