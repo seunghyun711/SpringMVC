@@ -1,5 +1,6 @@
 package com.example.member;
 
+import com.example.dto.SingleResponseDto;
 import com.example.member.mapper.MemberMapper;
 import com.example.response.MultiResponseDto;
 import com.example.stamp.Stamp;
@@ -50,15 +51,15 @@ public class MemberController {
     // 회원 정보 수정
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(@PathVariable("member-id") @Min(1) long memberId,
-                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
-        memberPatchDto.setMemberId(memberId);
+                                      @Valid @RequestBody MemberDto.Patch requestBody) {
+        requestBody.setMemberId(memberId);
 
-        // MemberPatchDto -> Member
-       Member response =
-               memberService.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
+        Member member =
+                memberService.updateMember(mapper.memberPatchDtoToMember(requestBody));
 
-
-        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.OK);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)),
+                HttpStatus.OK);
     }
 
     // id로 회원 정보 조회
@@ -75,8 +76,9 @@ public class MemberController {
         List<Member> members = pageMembers.getContent();
 
         return new ResponseEntity<>(
-            new MultiResponseDto<>(mapper.membersToMemberResponseDtos(members),pageMembers),
-        HttpStatus.OK);
+                new MultiResponseDto<>(mapper.membersToMemberResponses(members),
+                        pageMembers),
+                HttpStatus.OK);
     }
 
     // 회원 정보 삭제
